@@ -13,7 +13,7 @@ docker-compose down
 docker-compose rm
 
 # Se borra una anterior imagen
-docker rmi bancos-virtuales-node:latest
+docker rmi sail-8.3/app:latest
 
 # Se ejecuta el contenedor de docker
 docker-compose up -d
