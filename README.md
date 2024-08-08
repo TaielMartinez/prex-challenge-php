@@ -1,6 +1,6 @@
-## Instalacion
+## Instalación
 
-### Automatica
+### Automática
 Para instalar en un entorno de desarrollo puede ejecutar el string start
 
 `sh start.sh`
@@ -16,7 +16,7 @@ ejecutar `docker-compose up -d` para levantar los servicios
 
 `docker-compose exec laravel.test php artisan db:seed` para crear datos de prueba
 
-Si es la primera ejecucion: Reiniciar el contenedor php para ejecutar el servidor con los paquetes instalados
+Si es la primera ejecución: Reiniciar el contenedor php para ejecutar el servidor con los paquetes instalados
 `docker-compose down && docker-compose up -d`
 
 ## Diagrama de casos de uso
@@ -101,3 +101,151 @@ Sistema->>Giphy: Solicitar GIFs por IDs
 Giphy->>Sistema: Devolver GIFs
 Sistema->>Usuario: Devolver lista de GIFs favoritos
 ```
+
+## Diagrama de datos
+```
+Users {
+    bigint unsigned id
+    varchar name
+    varchar email
+    timestamp email_verified_at
+    varchar password
+    varchar remember_token
+    timestamp created_at
+    timestamp updated_at
+}
+
+Favorites {
+    bigint unsigned id
+    bigint unsigned user_id
+    varchar ghipy_id
+    varchar alias
+    timestamp created_at
+    timestamp updated_at
+}
+
+Sessions {
+    varchar id
+    bigint unsigned user_id
+    varchar ip_address
+    text user_agent
+    longtext payload
+    int last_activity
+}
+
+OauthAccessTokens {
+    varchar id
+    bigint unsigned user_id
+    char client_id
+    varchar name
+    text scopes
+    tinyint revoked
+    timestamp created_at
+    timestamp updated_at
+    datetime expires_at
+}
+
+OauthClients {
+    char id
+    bigint unsigned user_id
+    varchar name
+    varchar secret
+    varchar provider
+    text redirect
+    tinyint personal_access_client
+    tinyint password_client
+    tinyint revoked
+    timestamp created_at
+    timestamp updated_at
+}
+
+OauthRefreshTokens {
+    varchar id
+    varchar access_token_id
+    tinyint revoked
+    datetime expires_at
+}
+
+PasswordResetTokens {
+    varchar email
+    varchar token
+    timestamp created_at
+}
+
+Jobs {
+    bigint unsigned id
+    varchar queue
+    longtext payload
+    tinyint unsigned attempts
+    int unsigned reserved_at
+    int unsigned available_at
+    int unsigned created_at
+}
+
+FailedJobs {
+    bigint unsigned id
+    varchar uuid
+    text connection
+    text queue
+    longtext payload
+    longtext exception
+    timestamp failed_at
+}
+
+Cache {
+    varchar key
+    mediumtext value
+    int expiration
+}
+
+CacheLocks {
+    varchar key
+    varchar owner
+    int expiration
+}
+
+JobBatches {
+    varchar id
+    varchar name
+    int total_jobs
+    int pending_jobs
+    int failed_jobs
+    longtext failed_job_ids
+    mediumtext options
+    int cancelled_at
+    int created_at
+    int finished_at
+}
+
+Migrations {
+    int unsigned id
+    varchar migration
+    int batch
+}
+
+OauthAuthCodes {
+    varchar id
+    bigint unsigned user_id
+    char client_id
+    text scopes
+    tinyint revoked
+    datetime expires_at
+}
+
+OauthPersonalAccessClients {
+    bigint unsigned id
+    char client_id
+    timestamp created_at
+    timestamp updated_at
+}
+
+Users ||--o{ Favorites : "tiene"
+Users ||--o{ Sessions : "tiene"
+Users ||--o{ OauthAccessTokens : "tiene"
+Users ||--o{ OauthClients : "tiene"
+OauthAccessTokens ||--o{ OauthClients : "pertenece a"
+OauthRefreshTokens ||--o{ OauthAccessTokens : "pertenece a"
+```
+
+## Postman collection
+Importar la colección `postman_collection.json`
