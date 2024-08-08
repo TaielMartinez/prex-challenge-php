@@ -18,6 +18,13 @@ docker rmi bancos-virtuales-node:latest
 # Se ejecuta el contenedor de docker
 docker-compose up -d
 
+# Instala las dependencias de php
+docker-compose exec laravel.test composer install
+
+# Reiniciar el php con los paquetes ya instalados
+docker-compose down
+docker-compose up -d
+
 # Se ejecuta el comando para crear la base de datos
 docker-compose exec laravel.test php artisan migrate
 docker-compose exec laravel.test php artisan db:seed
